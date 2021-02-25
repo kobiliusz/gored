@@ -2,5 +2,4 @@ prod:
 	git pull
 	go build
 	chmod +x gored
-	./gored
-	
+	GIN_MODE=release ./gored
