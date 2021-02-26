@@ -2,10 +2,22 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	"net"
 
 	"github.com/gin-gonic/gin"
 )
+
+const lights_on_command = "{\"id\": 1, \"method\": \"set_power\", \"params\": [\"on\", \"smooth\", 300]}\r\n"
+const lights_off_command = "{\"id\": 1, \"method\": \"set_power\", \"params\": [\"off\", \"smooth\", 300]}\r\n"
+
+func lights_ips() [4]string {
+	return [4]string{
+		"192.168.0.220",
+		"192.168.0.221",
+		"192.168.0.222",
+		"192.168.0.223",
+	}
+}
 
 type flow struct {
 	Url      string          `json:"url"`
@@ -30,12 +42,6 @@ func main() {
 
 	router := gin.Default()
 
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-
 	router.GET("/flows", func(c *gin.Context) {
 		json.NewEncoder(c.Writer).Encode(&flows)
 	})
@@ -48,9 +54,22 @@ func main() {
 }
 
 func lightson(c *gin.Context) {
-	fmt.Println("lightson")
+	all_lights_command(lights_on_command)
 }
 
 func lightsoff(c *gin.Context) {
-	fmt.Println("lightsoff")
+	all_lights_command(lights_off_command)
+}
+
+func all_lights_command(command string) {
+	for _, ip := range lights_ips() {
+		go send_command_to_light(ip, command)
+	}
+}
+
+func send_command_to_light(ip string, command string) {
+	tcpAddr, _ := net.ResolveTCPAddr("tcp", ip+":55443")
+	conn, _ := net.DialTCP("tcp", nil, tcpAddr)
+	conn.Write([]byte(command))
+	conn.CloseWrite()
 }
