@@ -8,9 +8,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const lights_on_command = "{\"id\": 1, \"method\": \"set_power\", \"params\": [\"on\", \"smooth\", 300]}\r\n"
+const lights_on_command = "{\"id\": 1, \"method\": \"set_power\", \"params\": [\"on\", \"smooth\", 300, 1 ]}\r\n"
 const lights_off_command = "{\"id\": 1, \"method\": \"set_power\", \"params\": [\"off\", \"smooth\", 300]}\r\n"
 const full_brightness_command = "{\"id\": 2, \"method\": \"set_bright\", \"params\": [100, \"smooth\", 300]}\r\n"
+const colortemp_command = "{\"method\":\"props\",\"params\":{\"ct\":6500}}\r\n"
 
 func lights_ips() [4]string {
 	return [4]string{
@@ -58,6 +59,7 @@ func main() {
 func lightson(c *gin.Context) {
 	all_lights_command(lights_on_command)
 	all_lights_command(full_brightness_command)
+	all_lights_command(colortemp_command)
 }
 
 func lightsoff(c *gin.Context) {
