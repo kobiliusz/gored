@@ -12,8 +12,8 @@ const lights_on_command = "{\"id\": 1, \"method\": \"set_power\", \"params\": [\
 const lights_off_command = "{\"id\": 1, \"method\": \"set_power\", \"params\": [\"off\", \"smooth\", 300]}\r\n"
 const full_brightness_command = "{\"id\": 2, \"method\": \"set_bright\", \"params\": [100, \"smooth\", 300]}\r\n"
 const colortemp_command = "{\"method\":\"props\",\"params\":{\"ct\":6500}}\r\n"
-const rgbmode_command = "{\"id\": 3, \"method\": \"set_power\", \"params\": [\"on\", \"smooth\", 300, 2]}"
-const colorblue_command = "{\"id\": 4, \"method\": \"start_cf\", \"params\": [1, 1, \"300, 1, 21247, 100\"]}"
+const rgbmode_command = "{\"id\": 3, \"method\": \"set_power\", \"params\": [\"on\", \"smooth\", 300, 2]}\r\n"
+const colorblue_command = "{\"id\": 4, \"method\": \"start_cf\", \"params\": [1, 1, \"300, 1, 21247, 100\"]}\r\n"
 
 func lights_ips() [4]string {
 	return [4]string{
