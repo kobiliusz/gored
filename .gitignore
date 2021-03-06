@@ -16,3 +16,4 @@ creds
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+creds.go

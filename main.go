@@ -6,6 +6,7 @@ import (
 	"sync"
 
 	"github.com/gin-gonic/gin"
+	"github.com/kobiliusz/go-miio"
 )
 
 const lights_on_command = "{\"id\": 1, \"method\": \"set_power\", \"params\": [\"on\", \"smooth\", 300, 1 ]}\r\n"
@@ -14,15 +15,6 @@ const full_brightness_command = "{\"id\": 2, \"method\": \"set_bright\", \"param
 const colortemp_command = "{\"method\":\"props\",\"params\":{\"ct\":6500}}\r\n"
 const rgbmode_command = "{\"id\": 3, \"method\": \"set_power\", \"params\": [\"on\", \"smooth\", 300, 2]}\r\n"
 const colorblue_command = "{\"id\": 4, \"method\": \"start_cf\", \"params\": [1, 1, \"300, 1, 21247, 100\"]}\r\n"
-
-func lights_ips() [4]string {
-	return [4]string{
-		"192.168.0.220",
-		"192.168.0.221",
-		"192.168.0.222",
-		"192.168.0.223",
-	}
-}
 
 type flow struct {
 	Url      string          `json:"url"`
@@ -47,6 +39,11 @@ func main() {
 			Url:      "/lights_blue",
 			Name:     "Lights Blue",
 			Function: lightsblue,
+		},
+		flow{
+			Url:      "/air_fav",
+			Name:     "Air Full",
+			Function: airheart,
 		},
 	}
 
@@ -92,4 +89,17 @@ func all_lights_command(command string) {
 		}(ip, command)
 	}
 	wg.Wait()
+}
+
+func airheart(c *gin.Context) {
+	val := "favorite"
+	go air_command("set_mode", []interface{}{val})
+}
+
+func air_command(command string, data []interface{}) {
+	var air miio.XiaomiDevice
+	air.Start(air_ip, air_token, miio.DefaultPort)
+	air.SendCommand(command, data, false, 69)
+	air.Stop()
+
 }
