@@ -99,7 +99,7 @@ func airheart(c *gin.Context) {
 func air_command(command string, data []interface{}) {
 	var air miio.XiaomiDevice
 	air.Start(air_ip, air_token, miio.DefaultPort)
-	air.SendCommand(command, data, false, 69)
+	air.SendCommand(command, data, false, 1)
 	air.Stop()
 
 }
