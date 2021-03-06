@@ -45,6 +45,11 @@ func main() {
 			Name:     "Air Full",
 			Function: airheart,
 		},
+		flow{
+			Url:      "/air_auto",
+			Name:     "Air Auto",
+			Function: airauto,
+		},
 	}
 
 	router := gin.Default()
@@ -93,6 +98,11 @@ func all_lights_command(command string) {
 
 func airheart(c *gin.Context) {
 	val := "favorite"
+	go air_command("set_mode", []interface{}{val})
+}
+
+func airauto(c *gin.Context) {
+	val := "auto"
 	go air_command("set_mode", []interface{}{val})
 }
 
