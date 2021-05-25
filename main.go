@@ -88,9 +88,11 @@ func all_lights_command(command string) {
 		go func(ip string, command string) {
 			defer wg.Done()
 			tcpAddr, _ := net.ResolveTCPAddr("tcp", ip+":55443")
-			conn, _ := net.DialTCP("tcp", nil, tcpAddr)
-			conn.Write([]byte(command))
-			conn.Close()
+			conn, err := net.DialTCP("tcp", nil, tcpAddr)
+			if err == nil {
+				conn.Write([]byte(command))
+				conn.Close()
+			}
 		}(ip, command)
 	}
 	wg.Wait()
